@@ -18,7 +18,8 @@ echo "This script mounts a CU Anschutz Isilon CIFS/SMB share under ~/mnt."
 echo "It will:"
 echo "  1) Ask for a mount/share name (used for both remote and local paths)"
 echo "  2) Verify network/VPN reachability"
-echo "  3) Mount //data.ucdenver.pvt/dept/SOM/DBMI/<name> to ~/mnt/<name>"
+echo "  3) Optionally ask for local file/dir permission mode (default: 775)"
+echo "  4) Mount //data.ucdenver.pvt/dept/SOM/DBMI/<name> to ~/mnt/<name>"
 echo ""
 
 # Prompt for mount/share name used for both remote and local paths.
@@ -34,6 +35,21 @@ case "$MOUNT_NAME" in
         exit 1
         ;;
 esac
+
+printf "Local file/dir mode [775]: " >/dev/tty
+read -r LOCAL_MODE </dev/tty || LOCAL_MODE=""
+if [ -z "$LOCAL_MODE" ]; then
+    LOCAL_MODE="775"
+fi
+case "$LOCAL_MODE" in
+    [0-7][0-7][0-7])
+        ;;
+    *)
+        echo "✗ Permission mode must be a 3-digit octal value like 775." >&2
+        exit 1
+        ;;
+esac
+OCTAL_MODE="0$LOCAL_MODE"
 
 # Remote share location (UNC path)
 SHARE="//data.ucdenver.pvt/dept/SOM/DBMI/$MOUNT_NAME"
@@ -84,7 +100,7 @@ case "$OS" in
         # It will prompt you for credentials if required,
         # or use your current login keychain.
         #
-        if ! mount_smbfs "$SHARE" "$MOUNT_POINT"; then
+        if ! mount_smbfs -d "$OCTAL_MODE" -f "$OCTAL_MODE" "$SHARE" "$MOUNT_POINT"; then
             echo "✗ Failed to mount $SHARE at $MOUNT_POINT." >&2
             print_share_path_tips
             exit 1
@@ -126,7 +142,7 @@ case "$OS" in
         fi
         # Mount the share with domainauto for automatic domain selection
         if ! sudo mount -t cifs "$SHARE" "$MOUNT_POINT" \
-            -o username="$CIFS_USERNAME",uid="$USER",gid="$USER",domainauto,file_mode=0777,dir_mode=0777; then
+            -o username="$CIFS_USERNAME",uid="$USER",gid="$USER",domainauto,file_mode="$OCTAL_MODE",dir_mode="$OCTAL_MODE"; then
             echo "✗ Failed to mount $SHARE at $MOUNT_POINT." >&2
             print_share_path_tips
             exit 1
