@@ -1,0 +1,17 @@
+---
+# used for running automated tests
+name: tests
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  pre_commit_checks:
+    runs-on: ubuntu-24.04
+    steps:
+      # checks out the repo
+      - uses: actions/checkout@v4
+      # use prek for speedy precommit results
+      - uses: j178/prek-action@v1
