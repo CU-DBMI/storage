@@ -1,6 +1,6 @@
 # CU DBMI storage utilities
 
-These scripts are here to help you get started quickly, but please review and use them with care since environments can vary!
+These scripts are here to help you get started with storage quickly, but please review and use them with care since environments can vary!
 
 ## Run `mount_isilon.sh` from GitHub
 
