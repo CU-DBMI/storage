@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 # shellcheck shell=sh
 # ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-# mount_bandicoot.sh
+# mount_isilon.sh
 #
 # This script creates a local mount point and mounts a CIFS/Samba share
 # at //data.ucdenver.pvt/dept/SOM/DBMI/<mount_name> into ~/mnt/<mount_name>.
@@ -23,7 +23,7 @@ echo "  4) Mount //data.ucdenver.pvt/dept/SOM/DBMI/<name> to ~/mnt/<name>"
 echo ""
 
 # Prompt for mount/share name used for both remote and local paths.
-printf "Mount/share name (e.g., LabName, etc.): " >/dev/tty
+printf "Mount/share name (for example: LabName): " >/dev/tty
 read -r MOUNT_NAME </dev/tty || MOUNT_NAME=""
 if [ -z "$MOUNT_NAME" ]; then
     echo "✗ Mount/share name cannot be empty." >&2
