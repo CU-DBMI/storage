@@ -9,7 +9,7 @@ repos:
     -   id: check-yaml
     -   id: detect-private-key
 -   repo: https://github.com/codespell-project/codespell
-    rev: v2.4.1
+    rev: v2.4.2
     hooks:
     -   id: codespell
         exclude: |
@@ -37,7 +37,7 @@ repos:
               environment.yml
           )$
 -   repo: https://github.com/rhysd/actionlint
-    rev: v1.7.10
+    rev: v1.7.12
     hooks:
     -   id: actionlint
 -   repo: https://github.com/koalaman/shellcheck-precommit
