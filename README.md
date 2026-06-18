@@ -1,28 +1,27 @@
-# CU DBMI storage utilities
+# CU DBMI Data Storage Utilities and Guidance
 
-These scripts are here to help you get started with data storage quickly.
+These scripts and guides are here to help CU DBMI labs get started with data storage, migration planning, and shared research infrastructure.
 
 Please use your best judgment when using these scripts, and treat them as use-at-your-own-risk since environments can vary.
 
+## Guidance
+
+- 🧭 [Data Migration Guide](docs/data-migration-guide.md): choose the right storage resource, plan lab migrations, handle HIPAA/PHI, coordinate live databases, move source code ownership, use VPN, and manage shared credentials with 1Password.
+- 🚚 [Data Transfer Guide](docs/data-transfer-guide.md): connect to Isilon, use the mount script, transfer data to PetaLibrary with Globus Connect Personal, and troubleshoot common mount issues.
+
+## Data Classification
+
+Before storing or transferring data, classify it as Public, Confidential, or Highly Confidential using CU's [Data Classification guidance](https://www.cu.edu/data-governance/resources-support/data-classification).
+
+- Confidential data may be appropriate for approved shared storage such as Isilon or PetaLibrary when access controls, ownership, and retention are clear.
+- Highly Confidential data, including regulated data such as HIPAA/PHI, requires additional review and approved controls before using Isilon, PetaLibrary, Globus, or any other transfer path.
+- When in doubt, ask the data owner, campus IT/security, or DBMI before moving the data.
+
 ## Connecting to Isilon Storage
 
-These guides assume you already have an Isilon share and that your account has access (please verify or request both before using).
+For Isilon connection and transfer instructions, including the command-line mount script, see the [Data Transfer Guide](docs/data-transfer-guide.md).
+
+To request Isilon storage for DBMI work, contact [dbmi@medschool.zendesk.com](mailto:dbmi@medschool.zendesk.com). A university SpeedType is used to help determine billing and cost allocation. Current Anschutz Isilon rate details are listed under "Isilon Central File Server" on the CU Anschutz OIT [Billing and Rates](https://www.cuanschutz.edu/offices/office-of-information-technology/get-help/billing-and-rates#ac-backup-and-storage-0) page.
 
 For additional setup and connection guidance on Windows or macOS, see the SOM knowledge base docs:
 https://medschool.zendesk.com/hc/en-us/sections/360005463054-Map-to-SOM-Network-Drive
-
-You can also use this script to connect to Isilon storage at CU Anschutz from the command line on macOS or Linux.
-
-You can run the script directly from a GitHub raw URL:
-
-```sh
-curl https://raw.githubusercontent.com/CU-DBMI/storage/main/src/mount_isilon.sh | sh
-```
-
-Safer option (inspect before running):
-
-```sh
-curl -fsSL https://raw.githubusercontent.com/CU-DBMI/storage/main/src/mount_isilon.sh -o /tmp/mount_isilon.sh
-less /tmp/mount_isilon.sh
-sh /tmp/mount_isilon.sh
-```
