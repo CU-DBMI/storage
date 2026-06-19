@@ -47,13 +47,13 @@ You can use the mount script in this repository to connect to Isilon storage at 
 Run the script directly from the GitHub raw URL:
 
 ```sh
-curl https://raw.githubusercontent.com/CU-DBMI/storage/main/src/mount_isilon.sh | sh
+curl https://raw.githubusercontent.com/CU-DBMI/data-storage/main/src/mount_isilon.sh | sh
 ```
 
 Safer option, which lets you inspect the script before running it:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/CU-DBMI/storage/main/src/mount_isilon.sh -o /tmp/mount_isilon.sh
+curl -fsSL https://raw.githubusercontent.com/CU-DBMI/data-storage/main/src/mount_isilon.sh -o /tmp/mount_isilon.sh
 less /tmp/mount_isilon.sh
 sh /tmp/mount_isilon.sh
 ```
