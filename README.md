@@ -9,6 +9,14 @@ Please use your best judgment when using these scripts, and treat them as use-at
 - 🧭 [Data Migration Guide](docs/data-migration-guide.md): choose the right storage resource, plan lab migrations, handle HIPAA/PHI, coordinate live databases, move source code ownership, use VPN, and manage shared credentials with 1Password.
 - 🚚 [Data Transfer Guide](docs/data-transfer-guide.md): connect to Isilon, use the mount script, transfer data to PetaLibrary with Globus Connect Personal, and troubleshoot common mount issues.
 
+## Support Contacts
+
+| Support area      | Contact                                                                   | Use for                                                                                                                                        |
+| ----------------- | ------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| SOM IT help       | [dbmi@medschool.zendesk.com](mailto:dbmi@medschool.zendesk.com)           | Most School of Medicine IT support requests, including DBMI storage/access questions; SOM Information Services can escalate to OIT when needed |
+| Anschutz OIT      | [ucd-oit-helpdesk@cuanschutz.edu](mailto:ucd-oit-helpdesk@cuanschutz.edu) | Campus platform support, infrastructure, networking, STAR/SFTP, and services beyond the direct SOM support path                                |
+| Anschutz HPC help | [hpcsupport@cuanschutz.edu](mailto:hpcsupport@cuanschutz.edu)             | HPC-specific requests for Alpine, PetaLibrary, Globus, and related research computing workflows                                                |
+
 ## Data Classification
 
 Before storing or transferring data, classify it as Public, Confidential, or Highly Confidential using CU's [Data Classification guidance](https://www.cu.edu/data-governance/resources-support/data-classification).

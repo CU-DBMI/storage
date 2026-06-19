@@ -6,7 +6,7 @@ The short version:
 
 1. Put shared lab files on Isilon when they need to be available to multiple people or systems.
 1. Work with the DBMI software engineering team before moving live databases such as PostgreSQL or MySQL.
-1. Use Google Cloud when you need cloud compute, managed storage, or project-specific infrastructure that can be paid for with SpeedTypes.
+1. Use Google Cloud or campus-managed compute when you need infrastructure beyond shared storage.
 1. Use OneDrive for personal or small shared files, but avoid it for large migrations or high-throughput workflows.
 1. Update GitHub organization ownership, teams, and access before people leave or projects change ownership; transfer repositories only when the current organization cannot support the project long term.
 1. Use VPN for internal CU Anschutz resources and 1Password for shared password management.
@@ -175,6 +175,31 @@ Before using Google Cloud, confirm:
 - How costs will be monitored.
 - Who will shut down or archive resources when the project ends.
 
+### Campus-managed compute
+
+Not every compute need belongs in Google Cloud. Some projects may be a better fit for on-prem or campus-managed infrastructure, especially when the workflow needs to stay close to campus storage, uses internal services, or needs a simpler support path.
+
+Campus-managed options may include:
+
+- [SLCE](https://medschool.cuanschutz.edu/informationservices/research/slce) or other DBMI-supported compute environments, when available and appropriate for the workflow.
+- OIT-managed virtual machines for server-style workloads, internal applications, or services that need a campus-managed VM. The [OIT self-service catalog](https://oitselfservice.ucdenver.edu/RequestCenter/website/OITServiceCatalogWebsite/application/index.html) requires campus network access.
+- Alpine or other CURC compute resources for HPC-style batch jobs and large analysis workflows, typically paired with PetaLibrary or other approved storage.
+
+Use campus-managed compute when:
+
+- The workload needs to stay near Isilon, PetaLibrary, or campus network resources.
+- The work is better supported by DBMI, OIT, or CURC than by a public cloud project.
+- The project needs a VM or managed server rather than elastic cloud services.
+- The data classification, access model, or operational support path points to campus infrastructure.
+
+Before using campus-managed compute, confirm:
+
+- Who owns the service. The PI should be the default accountable owner unless that blocks implementation.
+- Which team supports the environment: DBMI, OIT, CURC, or another group.
+- Which SpeedType or funding source should pay for billable resources.
+- Whether the environment is approved for the data classification.
+- How storage will be mounted, transferred, backed up, and retired.
+
 ### PetaLibrary and Globus transfers
 
 PetaLibrary can be useful for large research storage allocations and high-volume data movement connected to CU Research Computing workflows.
@@ -272,6 +297,7 @@ Before moving data:
 - Confirm VPN access for users who need internal storage, servers, databases, or dashboards.
 - Identify credentials and secrets that need to move into a shared 1Password vault or managed secrets system.
 - Identify SpeedTypes or funding sources for billable storage and cloud resources.
+- Decide whether compute should run in Google Cloud, SLCE/DBMI-supported infrastructure, OIT-managed VMs, or CURC/Alpine.
 - For PetaLibrary moves, confirm Globus access, Globus Connect Personal setup, and allocation access before the transfer window.
 
 During migration:
@@ -308,6 +334,7 @@ After migration:
 | Shared passwords, tokens, API keys, or recovery codes                             | 1Password shared vault                                                             |
 | Large Isilon-to-PetaLibrary transfer                                              | Globus with Globus Connect Personal                                                |
 | Cloud compute, managed services, or funded project infrastructure                 | Google Cloud with SpeedType planning                                               |
+| Campus-managed VM, internal service, or on-prem compute need                      | SLCE/DBMI-supported compute, OIT-managed VMs, or CURC/Alpine as appropriate        |
 | Lab or project source code                                                        | Existing GitHub org with updated ownership/access, or transfer only when necessary |
 | Personal documents or small collaboration files                                   | OneDrive                                                                           |
 | Large file migration or high-throughput workflow                                  | Isilon or Google Cloud, not OneDrive                                               |
