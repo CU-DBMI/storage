@@ -44,6 +44,14 @@ https://medschool.zendesk.com/hc/en-us/sections/360005463054-Map-to-SOM-Network-
 
 You can use the mount script in this repository to connect to Isilon storage at CU Anschutz from the command line on macOS or Linux.
 
+When prompted, enter either a DBMI share name, a path below the DBMI base, or a full SMB path. For example, all of these input styles are supported:
+
+```text
+LabName
+dbmi/Way_McKinsey_Cardiac_Fibrosis
+smb://data.ucdenver.pvt/dept/som/dbmi/dbmi/Way_McKinsey_Cardiac_Fibrosis
+```
+
 Run the script directly from the GitHub raw URL:
 
 ```sh

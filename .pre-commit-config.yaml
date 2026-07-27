@@ -20,7 +20,7 @@ repos:
               .*\.ipynb |
               .*\.txt
           )$
-        args: ["-L", "SOM"]
+        args: ["-L", "SOM,som"]
 -   repo: https://github.com/executablebooks/mdformat
     rev: 1.0.0
     hooks:
