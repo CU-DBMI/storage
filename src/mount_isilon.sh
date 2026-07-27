@@ -4,7 +4,7 @@
 # mount_isilon.sh
 #
 # This script creates a local mount point and mounts a CIFS/Samba share
-# at //data.ucdenver.pvt/dept/SOM/DBMI/<mount_name> into ~/mnt/<mount_name>.
+# at //data.ucdenver.pvt/dept/SOM/DBMI/<share_path> into ~/mnt/<mount_name>.
 # It auto-detects macOS vs. Linux, installs cifs-utils on Linux if needed,
 # verifies VPN/network access, and works under any POSIX shell
 # (sh, bash, zsh, dash, etc.).
@@ -16,22 +16,40 @@ set -eu
 
 echo "This script mounts a CU Anschutz Isilon CIFS/SMB share under ~/mnt."
 echo "It will:"
-echo "  1) Ask for a mount/share name (used for both remote and local paths)"
+echo "  1) Ask for a mount/share name or SMB path"
 echo "  2) Verify network/VPN reachability"
 echo "  3) Optionally ask for local file/dir permission mode (default: 775)"
-echo "  4) Mount //data.ucdenver.pvt/dept/SOM/DBMI/<name> to ~/mnt/<name>"
+echo "  4) Mount the share to ~/mnt/<last-path-component>"
 echo ""
 
-# Prompt for mount/share name used for both remote and local paths.
-printf "Mount/share name (for example: LabName): " >/dev/tty
-read -r MOUNT_NAME </dev/tty || MOUNT_NAME=""
-if [ -z "$MOUNT_NAME" ]; then
-    echo "✗ Mount/share name cannot be empty." >&2
+# Prompt for a simple share name, relative path below DBMI, or full SMB path.
+printf "Mount/share name or SMB path (for example: LabName or smb://server/share/path): " >/dev/tty
+read -r SHARE_INPUT </dev/tty || SHARE_INPUT=""
+if [ -z "$SHARE_INPUT" ]; then
+    echo "✗ Mount/share name or SMB path cannot be empty." >&2
     exit 1
 fi
-case "$MOUNT_NAME" in
-    */* | "." | "..")
-        echo "✗ Mount name cannot contain '/' and cannot be '.' or '..'." >&2
+
+case "$SHARE_INPUT" in
+    *:*)
+        case "$SHARE_INPUT" in
+            smb://* | //*) ;;
+            *)
+                echo "✗ Only smb:// or // paths are supported for full share paths." >&2
+                exit 1
+                ;;
+        esac
+        ;;
+esac
+
+# Remove trailing slashes so basename-style extraction is predictable.
+while [ "${SHARE_INPUT%/}" != "$SHARE_INPUT" ]; do
+    SHARE_INPUT="${SHARE_INPUT%/}"
+done
+
+case "$SHARE_INPUT" in
+    "" | "." | ".." | */. | */..)
+        echo "✗ Mount/share path cannot be empty, '.', or '..'." >&2
         exit 1
         ;;
 esac
@@ -52,7 +70,30 @@ esac
 OCTAL_MODE="0$LOCAL_MODE"
 
 # Remote share location (UNC path)
-SHARE="//data.ucdenver.pvt/dept/SOM/DBMI/$MOUNT_NAME"
+case "$SHARE_INPUT" in
+    smb://*)
+        SHARE="//${SHARE_INPUT#smb://}"
+        ;;
+    //*)
+        SHARE="$SHARE_INPUT"
+        ;;
+    /*)
+        echo "✗ Relative share paths should not start with '/'." >&2
+        exit 1
+        ;;
+    *)
+        SHARE="//data.ucdenver.pvt/dept/SOM/DBMI/$SHARE_INPUT"
+        ;;
+esac
+
+MOUNT_NAME="${SHARE_INPUT##*/}"
+case "$MOUNT_NAME" in
+    "" | "." | "..")
+        echo "✗ Could not determine a safe local mount name from: $SHARE_INPUT" >&2
+        exit 1
+        ;;
+esac
+
 # Local directory where the share will be mounted
 MOUNT_POINT="$HOME/mnt/$MOUNT_NAME"
 # Strip leading '//' and everything after the first '/'
@@ -62,7 +103,7 @@ HOST="${HOST%%/*}"
 print_share_path_tips() {
     echo "Tips to troubleshoot network/share path issues:" >&2
     echo "  • Confirm VPN is connected and retry." >&2
-    echo "  • Verify the share name and case are correct: $MOUNT_NAME" >&2
+    echo "  • Verify the share path and case are correct: $SHARE_INPUT" >&2
     echo "  • Verify this exact share exists and you have access: $SHARE" >&2
     echo "  • If unsure, ask Isilon admins for the exact share path." >&2
 }
